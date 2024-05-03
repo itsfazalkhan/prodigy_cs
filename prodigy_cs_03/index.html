@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Strength Checker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 150px auto;
+    text-align: center;
+  }
+
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 50px;
+  }
+
+  .strength-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden; /* Hide overflow */
+  }
+
+  .bar {
+    height: 100%;
+    width: 0;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+  }
+
+  #strength-text {
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="    margin-bottom: 50px;">Password Strength Checker</h1>
+    <input type="password" id="password" placeholder="Enter your password">
+    <div class="strength-bar">
+      <div class="bar"></div>
+    </div>
+    <p id="strength-text"></p>
+  </div>
+
+  <script>
+    var passwordInput = document.getElementById("password");
+    var strengthBar = document.querySelector(".bar");
+    var strengthText = document.getElementById("strength-text");
+    var maxLength = 16; // Set maximum password length
+
+    passwordInput.addEventListener("input", function() {
+      var password = passwordInput.value;
+      var strength = 0;
+      var width = 0;
+
+      if (password.length >= 8 && password.length <= maxLength) {
+        strength += 1;
+      }
+      if (password.match(/[a-z]/)) {
+        strength += 1;
+      }
+      if (password.match(/[A-Z]/)) {
+        strength += 1;
+      }
+      if (password.match(/[0-9]/)) {
+        strength += 1;
+      }
+      if (password.match(/[$&+,:;=?@#|'<>.^*()%!-]/)) {
+        strength += 1;
+      }
+      if (password.length >= 12) {
+        strength += 1;
+      }
+        /* if (password.match(/(.)\1+/)) {
+        strength -= 1; // Penalty for repeated characters
+      }*/
+      if (password.match(/[^\w\s]/)) {
+        strength += 1;
+      }
+      if (password.match(/[^\w\s]/) && password.match(/[^a-zA-Z0-9\s]/)) {
+        strength += 1; // Additional strength for special characters other than alphanumeric
+      }
+
+      width = (password.length <= maxLength) ? (password.length / maxLength) * 100 : 100; // Calculate width of strength bar
+
+      strengthBar.style.width = width + "%"; // Set width of strength bar
+
+      // Convert the strength value to a range from 0 to 100
+      var range = Math.min(Math.max(strength, 0), 10) * 10;
+      // Convert the range to a color between red and green
+      var color = 'rgb(' + (255 - range * 2.55) + ',' + (range * 2.55) + ',0)';
+
+      strengthBar.style.backgroundColor = color; // Set color of strength bar
+
+      switch (strength) {
+        case 0:
+          strengthText.textContent = "Very Weak";
+          strengthText.style.color = color; // Red
+          break;
+        case 1:
+          strengthText.textContent = "Weak";
+          strengthText.style.color = color; // Red
+          break;
+        case 2:
+          strengthText.textContent = "Fair";
+          strengthText.style.color = color; // Red
+          break;
+        case 3:
+          strengthText.textContent = "Moderate";
+          strengthText.style.color = color; // Red
+          break;
+        case 4:
+          strengthText.textContent = "Strong";
+          strengthText.style.color = color; // Red
+          break;
+        case 5:
+          strengthText.textContent = "Very Strong";
+          strengthText.style.color = color; // Red
+          break;
+        case 6:
+          strengthText.textContent = "Good";
+          strengthText.style.color = color; // Red
+          break;
+        case 7:
+          strengthText.textContent = "Great";
+          strengthText.style.color = color; // Red
+          break;
+        case 8:
+          strengthText.textContent = "Excellent";
+          strengthText.style.color = color; // Red
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
